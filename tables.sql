@@ -1,0 +1,33 @@
+-- SQLite
+
+DROP TABLE IF EXISTS films;
+DROP TABLE IF EXISTS vertoningen;
+DROP TABLE IF EXISTS verkoop;
+DROP TABLE IF EXISTS tickets;
+
+
+CREATE TABLE IF NOT EXISTS films (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    imdb_id TEXT NOT NULL,
+    titel TEXT NOT NULL,
+    knt BOOLEAN DEFAULT FALSE,
+    drie_d BOOLEAN DEFAULT FALSE,
+    duur INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS vertoningen (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    film_id INTEGER NOT NULL,
+    datum TEXT NOT NULL,
+    zaal INTEGER NOT NULL,
+    FOREIGN KEY (film_id) REFERENCES films (id)
+);
+
+CREATE TABLE IF NOT EXISTS tickets (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    datum_verkoop TEXT NOT NULL,
+    vertoning_id INTEGER NOT NULL,
+    minderjarig BOOLEAN NOT NULL,
+    prijs REAL NOT NULL,
+    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id)
+);
