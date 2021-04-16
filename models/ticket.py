@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from vertoning import Vertoning
-from film import Film
+from models.vertoning import Vertoning
+from models.film import Film
 from datetime import datetime
 from zoneinfo import ZoneInfo
 

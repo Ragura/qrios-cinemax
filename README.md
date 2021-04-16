@@ -6,7 +6,7 @@ Deze Python-applicatie voorziet een client en admin app voor het beheren en boek
 
 ## Onderdelen
 
-De admin app kan worden gestart via `admin.py` en is een terminal applicatie. De client app (kiosk-applicatie) kan worden gestart via `kiosk.py` en biedt een grafische interface. Het bestand `cinemax.db` doet dienst als centrale *SQLite* databank.
+De admin app kan worden gestart via `admin.py` en is een terminal applicatie. De client app (kiosk-applicatie) kan worden gestart via `kiosk.py` en biedt een grafische interface gebouwd met [PySimpleGUI](https://pysimplegui.readthedocs.io/en/latest/). Het bestand `cinemax.db` in de map `db` doet dienst als centrale *SQLite* databank.
 
 ## Installeren
 
@@ -32,6 +32,6 @@ API_KEY = XXXXXXX
 
 De applicatie maakt verbinding met de publieke API [The Movie Database](https://www.themoviedb.org), waaruit ze allerlei data voor films opvraagt. Om toegang te krijgen tot deze API moet je je registreren en een *API Key* aanvragen. Vervolgens plaats je de *key* die je gekregen hebt in het `config.ini` bestand.
 
-## Databank vullen
+## Databank maken en vullen
 
-Het bestand `database.py` kan ook als applicatie worden uitgevoerd om de databank te vullen met tabellen en testgegevens voor films, vertoningen en tickets. De SQL-commando's voor het maken en vullen van de tabellen vind je in de bestanden `populate.sql` en `tables.sql`.
+Het bestand `database.py` in de map `db` kan ook als applicatie worden uitgevoerd om de SQLite databank aan te maken en te vullen met tabellen en testgegevens voor films, vertoningen en tickets. De SQL-commando's die door de uitvoer van `database.py` uitgevoerd worden vind je in de bestanden `populate.sql` en `tables.sql` in de map `db`.

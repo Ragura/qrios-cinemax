@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
-from film import Film
-from gui_utils import get_img_data
+from models.film import Film
+from layouts.gui_utils import get_img_data
 
 
 def create_layout_films(films: list[Film]):

@@ -1,9 +1,9 @@
 import PySimpleGUI as sg
 
-from layout_films import create_layout_films
-from layout_detail import create_layout_detail, update_layout_detail, update_layout_prijs
-from datamanager import DataManager as dm
-from ticket import Ticket
+from layouts.layout_films import create_layout_films
+from layouts.layout_detail import create_layout_detail, update_layout_detail, update_layout_prijs
+from db.datamanager import DataManager as dm
+from models.ticket import Ticket
 
 vertoningen_vandaag = dm.vertoningen_vandaag()
 films = list({vertoning.film for vertoning in vertoningen_vandaag})

@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
-from film import Film
-from vertoning import Vertoning
-from ticket import Ticket
-from gui_utils import get_img_data
+from models.film import Film
+from models.vertoning import Vertoning
+from models.ticket import Ticket
+from layouts.gui_utils import get_img_data
 
 
 def create_layout_detail():

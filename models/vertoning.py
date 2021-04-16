@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from film import Film
+from models.film import Film
 from sqlite3 import Row
 from datetime import datetime
 

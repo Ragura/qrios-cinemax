@@ -1,7 +1,7 @@
-from database import dbconn
-from film import Film
-from vertoning import Vertoning
-from ticket import Ticket
+from db.database import dbconn
+from models.film import Film
+from models.vertoning import Vertoning
+from models.ticket import Ticket
 
 
 def prefix_column_names_sql(table: str, prefix: str, *cols: str) -> str:
