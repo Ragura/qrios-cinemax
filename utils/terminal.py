@@ -1,7 +1,21 @@
 from typing import Union, Optional, Sequence
 import os
+from ansimarkup import ansiprint as print
+
 
 TNumeric = Union[int, float]
+
+
+def maak_menu(items: list[Union[str, tuple[str, int]]], cijferkleur: str = "yellow") -> None:
+    for index, item in enumerate(items):
+        tekst = ""
+        cijfer = 0
+        if type(item) == str:
+            tekst = item
+            cijfer = index + 1
+        elif type(item) == tuple and len(item) == 2:
+            tekst, cijfer = item
+        print(f"<{cijferkleur}>{cijfer}.</{cijferkleur}> {tekst}")
 
 
 def input_getal(prompt: str = "", minimum: Optional[TNumeric] = None, maximum: Optional[TNumeric] = None, col: Sequence[TNumeric] = []) -> TNumeric:
@@ -35,7 +49,22 @@ def input_getal(prompt: str = "", minimum: Optional[TNumeric] = None, maximum: O
     return number
 
 
-def clear_terminal():
+def input_ja_nee(prompt: str = "", leeg_toegestaan: bool = False) -> Optional[bool]:
+    while True:
+        invoer = input(prompt)
+        antwoorden_positief = ["j", "ja"]
+        antwoorden_negatief = ["n", "nee", "neen"]
+        if invoer == "" and leeg_toegestaan:
+            return None
+        if invoer.lower() in antwoorden_positief:
+            return True
+        if invoer.lower() in antwoorden_negatief:
+            return False
+
+        print("Geef een ja/nee antwoord.")
+
+
+def clear_terminal() -> None:
     os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 
 
