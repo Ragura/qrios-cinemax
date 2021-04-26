@@ -65,7 +65,7 @@ def beheer_films():
                 titel = film_data["title"]
 
             print(f"<bold>Duur: ({film_data['runtime']}) </bold>", end="")
-            duur = input_getal()
+            duur = input_getal(leeg_toegestaan=True)
             if not duur:
                 duur = film_data["runtime"]
 
@@ -74,6 +74,14 @@ def beheer_films():
             knt = input_ja_nee(leeg_toegestaan=True)
             if not knt:
                 knt = film_data["adult"]
+
+            try:
+                dm.add_film(titel, int(duur), imdb_id, knt)
+            except:
+                print(
+                    "<red><bold>Aanmaken film mislukt. Contacteer een administrator.</bold></red>")
+            else:
+                print("<green><bold>Film succesvol toegevoegd!</bold></green>")
 
         elif keuze == 3:
             pass

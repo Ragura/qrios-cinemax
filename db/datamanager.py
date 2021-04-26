@@ -18,6 +18,12 @@ class DataManager:
             return [Film(**row) for row in cur.fetchall()]
 
     @staticmethod
+    def add_film(titel: str, duur: int, imdb_id: str, knt: bool) -> None:
+        with dbconn() as cur:
+            cur.execute("INSERT INTO films (titel, duur, imdb_id, knt) VALUES (?, ?, ?, ?)",
+                        (titel, duur, imdb_id, knt))
+
+    @staticmethod
     def vertoningen_vandaag() -> list[Vertoning]:
         with dbconn() as cur:
             cur.execute(

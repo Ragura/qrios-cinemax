@@ -18,16 +18,19 @@ def maak_menu(items: list[Union[str, tuple[str, int]]], cijferkleur: str = "yell
         print(f"<{cijferkleur}>{cijfer}.</{cijferkleur}> {tekst}")
 
 
-def input_getal(prompt: str = "", minimum: Optional[TNumeric] = None, maximum: Optional[TNumeric] = None, col: Sequence[TNumeric] = []) -> TNumeric:
+def input_getal(prompt: str = "", minimum: Optional[TNumeric] = None, maximum: Optional[TNumeric] = None, col: Sequence[TNumeric] = [], leeg_toegestaan: bool = False) -> Optional[TNumeric]:
     """ Functie voor input van een geheel of decimaal getal
 
     Keyword arguments:
     minimum: Minimumwaarde voor getal
     maximum: Maximumwaarde voor getal
     col: Een reeks van geldige getallen
+    leeg_toegestaan: Is een lege input toegestaan?
     """
     while True:
-        number = input(prompt)
+        number = input(prompt).strip()
+        if not len(number) and leeg_toegestaan:
+            return None
         try:
             number = int(number)
         except ValueError:
