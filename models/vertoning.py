@@ -10,6 +10,7 @@ class Vertoning:
     datum: str
     film: Film
     zaal: int
+    drie_d: bool
 
     @classmethod
     def from_sql_row(cls, row: Row):
@@ -24,7 +25,10 @@ class Vertoning:
         return cls(film=Film(**film_data), **vertoning_data)
 
     def __str__(self):
-        return f"Vertoning van {self.datum.split(' ')[1][:-3]} in zaal {self.zaal}"
+        datum = datetime.fromisoformat(self.datum)
+        # datum = datetime.strftime(self.datum.split(' ')[1][:-3], "%H:%M")
+        tijd = datum.strftime("%H:%M")
+        return f"{'3D-' if self.drie_d else ''}Vertoning van {tijd} in zaal {self.zaal}"
 
 
 if __name__ == '__main__':

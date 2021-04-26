@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS films (
     imdb_id TEXT NOT NULL,
     titel TEXT NOT NULL,
     knt BOOLEAN DEFAULT FALSE,
-    drie_d BOOLEAN DEFAULT FALSE,
     duur INTEGER NOT NULL
 );
 
@@ -20,6 +19,7 @@ CREATE TABLE IF NOT EXISTS vertoningen (
     film_id INTEGER NOT NULL,
     datum TEXT NOT NULL,
     zaal INTEGER NOT NULL,
+    drie_d BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (film_id) REFERENCES films (id)
 );
 

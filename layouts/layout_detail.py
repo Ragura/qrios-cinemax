@@ -17,9 +17,7 @@ def create_layout_detail():
                          key="-titel-")],
                 [
                     sg.Text("", size=(8, 1), font="Helvetica 14",
-                            key="-duur-"),
-                    sg.Text("3D film", font="Helvetica 14",
-                            key="-drie_d-", visible=False)
+                            key="-duur-")
                 ],
                 [sg.Text("KINDEREN NIET TOEGELATEN", font="Helvetica 14", text_color="red",
                          key="-knt-", visible=False)],
@@ -70,8 +68,6 @@ def update_layout_detail(window: sg.Window, film: Film, vertoningen: list[Verton
     uren = int(film.duur / 60)
     minuten = film.duur % 60
     window["-duur-"].update(value=f"{uren}u {minuten}min")
-    # Update 3D
-    window["-drie_d-"].update(visible=bool(film.drie_d))
     # Update KNT
     window["-knt-"].update(visible=bool(film.knt))
     window["-label_kinderen-"].update(visible=not bool(film.knt))
@@ -87,9 +83,10 @@ def update_layout_detail(window: sg.Window, film: Film, vertoningen: list[Verton
     window["-kinderen-"].update(value=0)
 
 
-def update_layout_prijs(window: sg.Window, film: Film):
-    totaal_prijs = Ticket.bereken_prijs(film, False) * int(window["-volwassenen-"].get()) \
-        + Ticket.bereken_prijs(film, True) * int(window["-kinderen-"].get())
+def update_layout_prijs(window: sg.Window, vertoning: Vertoning):
+    totaal_prijs = Ticket.bereken_prijs(vertoning, False) * int(window["-volwassenen-"].get()) \
+        + Ticket.bereken_prijs(vertoning, True) * \
+        int(window["-kinderen-"].get())
 
     window["-prijs-"].update(value=str(totaal_prijs))
     if totaal_prijs > 0:
