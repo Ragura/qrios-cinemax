@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS vertoningen (
     datum TEXT NOT NULL,
     zaal INTEGER NOT NULL,
     drie_d BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (film_id) REFERENCES films (id)
+    FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tickets (
@@ -29,5 +29,5 @@ CREATE TABLE IF NOT EXISTS tickets (
     vertoning_id INTEGER NOT NULL,
     minderjarig BOOLEAN NOT NULL,
     prijs REAL NOT NULL,
-    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id)
+    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE CASCADE
 );

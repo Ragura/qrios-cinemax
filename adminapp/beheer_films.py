@@ -1,8 +1,8 @@
 from configparser import ConfigParser
 from ansimarkup import ansiprint as print
-from models.film import Film
 from utils.terminal import maak_menu, input_getal, input_ja_nee, clear_terminal
 from db.datamanager import DataManager as dm
+from prettytable import PrettyTable
 import requests
 
 
@@ -16,6 +16,7 @@ def beheer_films():
             "Lijst films",
             "Film toevoegen",
             "Film zoeken",
+            "Film verwijderen",
             ("Terug naar hoofdmenu", 0)
         ]
         maak_menu(menu_items)
@@ -27,9 +28,12 @@ def beheer_films():
             break
         elif keuze == 1:
             films = sorted(dm.alle_films(), key=lambda x: x.titel)
-            for i in range(0, len(films), 2):
-                print(
-                    f"{films[i].titel:30}{films[i+1].titel if films[i+1] else ''}")
+            tabel = PrettyTable()
+            tabel.field_names = ["ID", "Titel", "Duur", "KNT", "IMDB_ID"]
+            for film in films:
+                tabel.add_row([film.id, film.titel, film.duur,
+                               "Ja" if film.knt else "Nee", film.imdb_id])
+            print(tabel)
 
         elif keuze == 2:
             while True:
@@ -84,7 +88,38 @@ def beheer_films():
                 print("<green><bold>Film succesvol toegevoegd!</bold></green>")
 
         elif keuze == 3:
-            pass
+            search = input("Zoek een film op titel of IMDB ID: ")
+            if search:
+                resultaten = dm.zoek_films(titel=search, imdb_id=search)
+                resultaten.sort(key=lambda f: f.titel)
+                tabel = PrettyTable()
+                tabel.field_names = ["ID", "Titel", "Duur", "KNT", "IMDB_ID"]
+                for film in resultaten:
+                    tabel.add_row([film.id, film.titel, film.duur,
+                                   "Ja" if film.knt else "Nee", film.imdb_id])
+                print(tabel)
+
+        elif keuze == 4:
+            search = input_getal(
+                "Verwijder een film op ID: ", leeg_toegestaan=True)
+            if search:
+                films = dm.zoek_films(id=int(search))
+                if films:
+                    aantal_vertoningen = dm.tel_vertoningen(
+                        film_id=int(search))
+                    if aantal_vertoningen:
+                        print(
+                            f"<red>OPGELET: Er zijn {aantal_vertoningen} vertoningen voor <b>{films[0].titel}</b> die ook zullen worden verwijderd. Doorgaan? (Ja/Nee)</red>", end="")
+                        if input_ja_nee():
+                            dm.verwijder_film(int(search))
+                            print(
+                                f"<green><b>{films[0].titel}</b> succesvol verwijderd.</green>")
+                    else:
+                        dm.verwijder_film(int(search))
+                        print(
+                            f"<green><b>{films[0].titel}</b> succesvol verwijderd.</green>")
+                else:
+                    print("Geen film met opgegeven ID gevonden.")
 
         print("\n<italic>Druk op een toets om verder te gaan...</italic>")
         input()

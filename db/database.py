@@ -22,6 +22,7 @@ class dbconn():
     def create_connection(self) -> None:
         try:
             self.conn = sqlite3.connect(self.DB_PATH)
+            self.conn.execute("PRAGMA foreign_keys = 1")
             self.conn.row_factory = sqlite3.Row
         except Error as e:
             print("Fout bij connectie met databank: ", e)

@@ -2,6 +2,7 @@ from db.database import dbconn
 from models.film import Film
 from models.vertoning import Vertoning
 from models.ticket import Ticket
+from typing import Union
 
 
 def prefix_column_names_sql(table: str, prefix: str, *cols: str) -> str:
@@ -22,6 +23,44 @@ class DataManager:
         with dbconn() as cur:
             cur.execute("INSERT INTO films (titel, duur, imdb_id, knt) VALUES (?, ?, ?, ?)",
                         (titel, duur, imdb_id, knt))
+
+    @staticmethod
+    def zoek_films(titel: str = "", imdb_id: str = "", id: int = 0) -> list[Film]:
+        with dbconn() as cur:
+            query: list[str] = []
+            params = []
+            if titel:
+                query.append("titel LIKE ?")
+                params.append(f"%{titel}%")
+            if imdb_id:
+                query.append("imdb_id = ?")
+                params.append(imdb_id)
+            if id:
+                query.append("id = ?")
+                params.append(id)
+            cur.execute(
+                "SELECT * FROM films WHERE " + " OR ".join(query), params)
+            return [Film(**row) for row in cur.fetchall()]
+
+    @staticmethod
+    def verwijder_film(id: int = 0) -> None:
+        with dbconn() as cur:
+            cur.execute(
+                "DELETE FROM films WHERE id = ?", [id])
+
+    @staticmethod
+    def zoek_vertoning(film_id: int = 0) -> list[Vertoning]:
+        with dbconn() as cur:
+            cur.execute(
+                "SELECT * FROM vertoningen WHERE film_id = ?", [film_id])
+            return [Vertoning(**row) for row in cur.fetchall()]
+
+    @staticmethod
+    def tel_vertoningen(film_id: int = 0) -> int:
+        with dbconn() as cur:
+            cur.execute(
+                "SELECT COUNT(*) FROM vertoningen WHERE film_id = ?", [film_id])
+            return cur.fetchone()[0]
 
     @staticmethod
     def vertoningen_vandaag() -> list[Vertoning]:
