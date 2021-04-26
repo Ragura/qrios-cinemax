@@ -57,8 +57,8 @@ while True:
         window["-c_vertoningen-"].update(visible=True)
         window["-c_kopen-"].update(visible=False)
     if event in ["-volwassenen-", "-kinderen-"]:
-        if huidige_film:
-            update_layout_prijs(window, huidige_film)
+        if huidige_vertoning:
+            update_layout_prijs(window, huidige_vertoning)
     if event == "-koop_tickets-":
         if (huidige_vertoning):
             aantal_volwassenen = int(values["-volwassenen-"])

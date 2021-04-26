@@ -23,7 +23,7 @@ class DataManager:
             cur.execute(
                 f"SELECT vertoningen.*, "
                 + prefix_column_names_sql("films", "film",
-                                          "id", "titel", "knt", "duur", "drie_d", "imdb_id")
+                                          "id", "titel", "knt", "duur", "imdb_id")
                 + f" FROM vertoningen "
                 f" INNER JOIN films ON vertoningen.film_id = films.id"
                 f" WHERE DATE(vertoningen.datum) == DATE('now')")

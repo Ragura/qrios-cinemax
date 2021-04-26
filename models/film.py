@@ -10,7 +10,6 @@ class Film:
     duur: int
     imdb_id: str
     knt: bool = False
-    drie_d: bool = False
 
     def __post_init__(self) -> None:
         self.beschrijving = ""
