@@ -24,11 +24,13 @@ class Vertoning:
                 vertoning_data[key] = row[key]
         return cls(film=Film(**film_data), **vertoning_data)
 
-    def __str__(self):
+    @property
+    def moment(self):
         datum = datetime.fromisoformat(self.datum)
-        # datum = datetime.strftime(self.datum.split(' ')[1][:-3], "%H:%M")
-        tijd = datum.strftime("%H:%M")
-        return f"{'3D-' if self.drie_d else ''}Vertoning van {tijd} in zaal {self.zaal}"
+        return datum.strftime("%H:%M")
+
+    def __str__(self):
+        return f"{'3D-' if self.drie_d else ''}Vertoning van {self.moment} in zaal {self.zaal}"
 
 
 if __name__ == '__main__':

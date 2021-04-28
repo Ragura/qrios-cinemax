@@ -1,6 +1,9 @@
 from typing import Union, Optional, Sequence
 import os
 from ansimarkup import ansiprint as print
+from datetime import datetime
+import time
+from zoneinfo import ZoneInfo
 
 
 TNumeric = Union[int, float]
@@ -72,6 +75,31 @@ def input_ja_nee(prompt: str = "", leeg_toegestaan: bool = False) -> Optional[bo
             return False
 
         print("Geef een ja/nee antwoord.")
+
+
+def input_datum(prompt: str = "", formaat: str = "%d-%m-%Y", leeg_toegestaan: bool = False) -> Optional[datetime]:
+    while True:
+        invoer = input(prompt)
+        if invoer == "" and leeg_toegestaan:
+            return None
+        try:
+            datum = datetime.strptime(invoer, formaat).replace(
+                tzinfo=ZoneInfo("Europe/Brussels"))
+            return datum
+        except:
+            print("Datum moet het volgende formaat hebben: DD-MM-JAAR")
+
+
+def input_tijd(prompt: str = "", formaat: str = "%H:%M", leeg_toegestaan: bool = False) -> Optional[datetime]:
+    while True:
+        invoer = input(prompt)
+        if invoer == "" and leeg_toegestaan:
+            return None
+        try:
+            tijd = datetime.strptime(invoer, formaat)
+            return tijd
+        except:
+            print("Tijd moet het volgende formaat hebben: UU:MM")
 
 
 def clear_terminal() -> None:

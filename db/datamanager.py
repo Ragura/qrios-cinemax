@@ -2,7 +2,6 @@ from db.database import dbconn
 from models.film import Film
 from models.vertoning import Vertoning
 from models.ticket import Ticket
-from typing import Union
 
 
 def prefix_column_names_sql(table: str, prefix: str, *cols: str) -> str:
@@ -48,12 +47,39 @@ class DataManager:
             cur.execute(
                 "DELETE FROM films WHERE id = ?", [id])
 
+    # @staticmethod
+    # def zoek_vertoning(film_id: int = 0) -> list[Vertoning]:
+    #     with dbconn() as cur:
+    #         cur.execute(
+    #             "SELECT * FROM vertoningen WHERE film_id = ?", [film_id])
+    #         return [Vertoning(**row) for row in cur.fetchall()]
+
     @staticmethod
-    def zoek_vertoning(film_id: int = 0) -> list[Vertoning]:
+    def zoek_vertoning_by_id(id: int) -> Vertoning:
         with dbconn() as cur:
             cur.execute(
-                "SELECT * FROM vertoningen WHERE film_id = ?", [film_id])
-            return [Vertoning(**row) for row in cur.fetchall()]
+                f"SELECT vertoningen.*, "
+                + prefix_column_names_sql("films", "film",
+                                          "id", "titel", "knt", "duur", "imdb_id")
+                + f" FROM vertoningen "
+                + f" INNER JOIN films ON vertoningen.film_id = films.id "
+                + f"WHERE vertoningen.id = ?", [id])
+            vertoning = Vertoning.from_sql_row(cur.fetchone())
+            return vertoning
+
+    @staticmethod
+    def verwijder_vertoning(id: int = 0) -> None:
+        with dbconn() as cur:
+            cur.execute(
+                "DELETE FROM vertoningen WHERE id = ?", [id])
+
+    @staticmethod
+    def add_vertoningen(vertoningen: list[dict]) -> None:
+        vertoningen_lists = [list(vertoning.values())
+                             for vertoning in vertoningen]
+        with dbconn() as cur:
+            cur.executemany("INSERT INTO vertoningen (film_id, datum, zaal, drie_d) VALUES (?, ?, ?, ?)",
+                            vertoningen_lists)
 
     @staticmethod
     def tel_vertoningen(film_id: int = 0) -> int:
