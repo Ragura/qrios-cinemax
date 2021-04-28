@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS vertoningen (
 CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     datum_verkoop TEXT NOT NULL,
-    vertoning_id INTEGER NOT NULL,
+    vertoning_id INTEGER ,
     minderjarig BOOLEAN NOT NULL,
     prijs REAL NOT NULL,
-    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE CASCADE
+    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE SET NULL
 );
