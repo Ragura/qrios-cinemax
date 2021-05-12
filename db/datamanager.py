@@ -2,6 +2,14 @@ from db.database import dbconn
 from models.film import Film
 from models.vertoning import Vertoning
 from models.ticket import Ticket
+from datetime import datetime
+from zoneinfo import ZoneInfo
+from typing import TypedDict
+
+
+class FilmOmzet(TypedDict):
+    film_titel: str
+    omzet: float
 
 
 def prefix_column_names_sql(table: str, prefix: str, *cols: str) -> str:
@@ -108,9 +116,54 @@ class DataManager:
             cur.executemany(
                 "INSERT INTO tickets (datum_verkoop, vertoning_id, minderjarig, prijs) VALUES (?, ?, ?, ?)", t)
 
+    @staticmethod
+    def alle_tickets() -> list[Ticket]:
+        with dbconn() as cur:
+            command = f"SELECT tickets.*, " \
+                + prefix_column_names_sql("vertoningen", "vertoning",
+                                          "id", "film_id", "datum", "zaal", "drie_d") \
+                + ", " + prefix_column_names_sql("films", "film",
+                                                 "id", "titel", "knt", "duur", "imdb_id") \
+                + f" FROM tickets " \
+                + f" INNER JOIN vertoningen ON tickets.vertoning_id = vertoningen.id" \
+                + f" INNER JOIN films ON vertoningen.film_id = films.id"
+
+            cur.execute(command)
+
+            return [Ticket.from_sql_row(row) for row in cur.fetchall()]
+
+    @staticmethod
+    def tickets_periode(start: str, eind: str = None) -> list[Ticket]:
+        with dbconn() as cur:
+            command = f"SELECT tickets.*, " \
+                + prefix_column_names_sql("vertoningen", "vertoning",
+                                          "id", "film_id", "datum", "zaal", "drie_d") \
+                + ", " + prefix_column_names_sql("films", "film",
+                                                 "id", "titel", "knt", "duur", "imdb_id") \
+                + f" FROM tickets " \
+                + f" INNER JOIN vertoningen ON tickets.vertoning_id = vertoningen.id" \
+                + f" INNER JOIN films ON vertoningen.film_id = films.id" \
+                + f" WHERE tickets.datum_verkoop BETWEEN ? AND ?"
+
+            cur.execute(command, [start, eind or datetime.now(
+                ZoneInfo("Europe/Brussels"))])
+
+            return [Ticket.from_sql_row(row) for row in cur.fetchall()]
+
+    @staticmethod
+    def tickets_omzet() -> list[FilmOmzet]:
+        with dbconn() as cur:
+            command = "SELECT films.titel as film_titel," \
+                + " SUM(tickets.prijs) as omzet" \
+                + " FROM tickets" \
+                + " INNER JOIN vertoningen ON tickets.vertoning_id = vertoningen.id" \
+                + " INNER JOIN films ON vertoningen.film_id = films.id" \
+                + " GROUP BY films.id" \
+                + " ORDER BY omzet DESC"
+
+            cur.execute(command)
+            return cur.fetchall()
+
 
 if __name__ == '__main__':
-    # print(DataManager.alle_films())
-    # for vertoning in DataManager.vertoningen_vandaag():
-    #     print(vertoning.film.titel)
     pass

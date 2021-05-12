@@ -13,16 +13,14 @@ class Vertoning:
     drie_d: bool
 
     @classmethod
-    def from_sql_row(cls, row: Row):
-        # keys = ["id", "datum", "zaal"]
-        film_data = {}
-        vertoning_data = {}
-        for key in row.keys():
-            if key.startswith("film_"):
-                film_data[key[5:]] = row[key]
-            else:
-                vertoning_data[key] = row[key]
-        return cls(film=Film(**film_data), **vertoning_data)
+    def from_sql_row(cls, row: Row, prefix: str = ""):
+        keys_vertoning = ["id", "datum", "zaal", "drie_d"]
+        keys_film = ["id", "imdb_id", "titel", "knt", "duur"]
+
+        data_vertoning = {key: row[prefix+key] for key in keys_vertoning}
+        data_film = {key: row["film_"+key] for key in keys_film}
+
+        return cls(film=Film(**data_film), **data_vertoning)
 
     @property
     def moment(self):

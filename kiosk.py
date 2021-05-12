@@ -63,8 +63,10 @@ while True:
         if (huidige_vertoning):
             aantal_volwassenen = int(values["-volwassenen-"])
             aantal_kinderen = int(values["-kinderen-"])
-            tickets = [Ticket(huidige_vertoning, True) for _ in range(
-                aantal_kinderen)] + [Ticket(huidige_vertoning, False) for _ in range(aantal_volwassenen)]
+            prijs_volwassene = Ticket.bereken_prijs(huidige_vertoning, False)
+            prijs_kind = Ticket.bereken_prijs(huidige_vertoning, True)
+            tickets = [Ticket(huidige_vertoning, True, prijs_kind) for _ in range(
+                aantal_kinderen)] + [Ticket(huidige_vertoning, False, prijs_volwassene) for _ in range(aantal_volwassenen)]
             dm.insert_tickets(tickets)
             sg.Window("Tickets gekocht", [[sg.Text("Geniet van de film!", font="Helvetica 20")]], element_justification="center",
                       auto_close=True, auto_close_duration=3, margins=(50, 50), keep_on_top=True, no_titlebar=True).read(close=True)[0]

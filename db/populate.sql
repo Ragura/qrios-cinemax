@@ -35,3 +35,9 @@ VALUES (1, date("now") || " 22:00:00+02:00", 1, false),
        (7, date("now") || " 22:00:00+02:00", 6, false),
        (7, date("now", "+1 day") || " 22:00:00+02:00", 6, false)
 ;
+
+INSERT INTO tickets (datum_verkoop, vertoning_id, minderjarig, prijs)
+VALUES (date("now") || " 13:22:00+02:00", 1, false, 11),
+       (date("now") || " 21:33:00+02:00", 4, false, 13)
+;
+       
