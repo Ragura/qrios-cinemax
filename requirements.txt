@@ -5,8 +5,10 @@ chardet==4.0.0
 colorama==0.4.4
 idna==2.10
 Pillow==8.2.0
+prettytable==2.1.0
 pycodestyle==2.7.0
 PySimpleGUI==4.38.0
 requests==2.25.1
 toml==0.10.2
 urllib3==1.26.4
+wcwidth==0.2.5
