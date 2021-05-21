@@ -5,6 +5,12 @@ from layouts.layout_detail import create_layout_detail, update_layout_detail, up
 from db.datamanager import DataManager as dm
 from models.ticket import Ticket
 
+sg.theme('DarkBlue4')
+
+splash = sg.Window("CINEMAX", [[sg.Image("splash.png")]], transparent_color=sg.theme_background_color(
+), no_titlebar=True, keep_on_top=True, size=(591, 335), element_padding=(0, 0), margins=(0, 0))
+splash.read(timeout=0)
+
 vertoningen_vandaag = dm.vertoningen_vandaag()
 films = list({vertoning.film for vertoning in vertoningen_vandaag})
 for film in films:
@@ -17,7 +23,7 @@ layout = [
     [
         sg.Column(layout_films, element_justification="center", key="-l_films-"),
         sg.Column(layout_detail, justification="center", element_justification="center",
-                  key="-l_detail-", visible=False)
+                  key="-l_detail-", visible=False, pad=((40, 40)))
     ]
 ]
 
@@ -29,6 +35,7 @@ window = sg.Window('Cinemax', layout, size=(
 huidige_film = None
 huidige_vertoning = None
 tickets = []
+splash.close()
 while True:
     event, values = window.read() or (None, None)
     if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
