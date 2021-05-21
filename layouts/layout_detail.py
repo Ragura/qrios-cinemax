@@ -20,38 +20,40 @@ def create_layout_detail():
                             key="-duur-")
                 ],
                 [sg.Text("KINDEREN NIET TOEGELATEN", font="Helvetica 14", text_color="red",
-                         key="-knt-", visible=False)],
+                         key="-knt-", visible=False, background_color="white")],
                 [sg.Text("", size=(50, 10), font="Helvetica 18",
                          key="-beschrijving-")],
 
                 [
                     sg.Column([
                         [sg.Listbox([], size=(50, 5), font="Helvetica 18", enable_events=True,
-                                    key="-vertoningen-")],
+                                    key="-vertoningen-", pad=(10, 10))],
                         [sg.Button("Terug naar films", font="Helvetica 16", key="-terug_naar_films-"), sg.Button(
-                            "Vertoning kiezen", disabled=True, font="Helvetica 16", pad=(300, 0), key="-naar_kopen-")]
+                            "Vertoning kiezen", disabled=True, font="Helvetica 16", pad=((310, 0), (0, 0)), key="-naar_kopen-")]
                     ], key="-c_vertoningen-"),
 
-                    sg.Column([
+                    sg.Frame("Tickets", [
                         [
                             sg.Text("Aantal volwassenen: ",
-                                    font="Helvetica 18"),
+                                    font="Helvetica 18", pad=((20, 7), (10, 0))),
                             sg.Spin(values=[i for i in range(
-                                999)], font="Helvetica 18", enable_events=True, key="-volwassenen-"),
+                                999)], font="Helvetica 18", enable_events=True, key="-volwassenen-", pad=((0, 108), (10, 0))),
                             sg.Text("Aantal kinderen: ", font="Helvetica 18",
-                                    visible=True, key="-label_kinderen-"),
+                                    visible=True, key="-label_kinderen-", pad=((0, 7), (10, 0))),
                             sg.Spin(values=[i for i in range(
-                                999)], font="Helvetica 18", enable_events=True, key="-kinderen-", visible=True)
+                                999)], font="Helvetica 18", enable_events=True, key="-kinderen-", visible=True, pad=((0, 0), (10, 0)))
                         ],
                         [
-                            sg.Text("Prijs: €", font="Helvetica 18"),
-                            sg.Text("0.00", font="Helvetica 18", key="-prijs-")
+                            sg.Text("Prijs: €", font="Helvetica 18",
+                                    pad=((20, 7), (10, 0))),
+                            sg.Text("0.00", font="Helvetica 18",
+                                    key="-prijs-", pad=((0, 0), (10, 0)))
                         ],
-                        [sg.Button("Andere vertoning", font="Helvetica 16", key="-terug_naar_vertoningen-"), sg.Button(
-                            "Tickets kopen", disabled=True, font="Helvetica 16", pad=(300, 0), key="-koop_tickets-")]
+                        [sg.Button("Andere vertoning", font="Helvetica 16", key="-terug_naar_vertoningen-", pad=((20, 0), (10, 10))), sg.Button(
+                            "Tickets kopen", disabled=True, font="Helvetica 16", pad=((260, 20), (10, 10)), key="-koop_tickets-")]
                     ], key="-c_kopen-", visible=False),
                 ]
-            ])
+            ], pad=(40, 0))
         ]
     ]
 

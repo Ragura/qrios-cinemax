@@ -9,7 +9,7 @@ def create_layout_films(films: list[Film]):
         "logo_wit.png", maxsize=(50, 50), first=True, local=True))
 
     rij_titel = [
-        sg.Frame(title="", layout=[[logo, sg.Text("CINEMAX", font="Helvetica 30")]])]
+        sg.Frame(title="", layout=[[logo, sg.Text("CINEMAX", font="Helvetica 30")]], pad=(0, 10))]
 
     FILMS_PER_RIJ = 5
 
