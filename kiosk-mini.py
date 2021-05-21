@@ -58,8 +58,10 @@ kolom_rechts = [
 
 kolom_beschrijving = [
     [
-        sg.Text("DUUR", size=(8, 1), font="Helvetica 14",
-                key="-DUUR-"),
+        sg.Text("DUUR", size=(3, 1), font="Helvetica 14",
+                key="-DUUR-", pad=((5, 0), (0, 0))),
+        sg.Text("min.", size=(5, 1), font="Helvetica 14",
+                key="-MINUTEN-", pad=((0, 0), (0, 0))),
         sg.Text("KINDEREN NIET TOEGELATEN", font="Helvetica 14",
                 key="-KNT-")
     ],
@@ -76,7 +78,7 @@ layout = [
 
 global window
 window = sg.Window('Cinemax', layout, size=(
-    1280, 720), element_justification="center", font="Helvetica 16", element_padding=(5, 5))
+    640, 720), element_justification="center", font="Helvetica 16", element_padding=(5, 5))
 
 
 def update_prijs(vertoning: Vertoning) -> None:
