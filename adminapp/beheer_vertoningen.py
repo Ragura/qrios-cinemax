@@ -7,9 +7,9 @@ from zoneinfo import ZoneInfo
 
 
 def beheer_vertoningen():
-    clear_terminal()
-    print("<white,blue>BEHEER VERTONINGEN</white,blue>")
     while True:
+        clear_terminal()
+        print("<white,blue>BEHEER VERTONINGEN</white,blue>")
         menu_items = [
             "Vertoningen vandaag",
             "Vertoning toevoegen",

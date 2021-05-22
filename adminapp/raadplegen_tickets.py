@@ -7,9 +7,9 @@ from zoneinfo import ZoneInfo
 
 
 def raadplegen_tickets():
-    clear_terminal()
-    print("<white,blue>BEHEER VERTONINGEN</white,blue>")
     while True:
+        clear_terminal()
+        print("<white,blue>BEHEER VERTONINGEN</white,blue>")
         menu_items = [
             "Wekelijkse ticketverkoop",
             "Rangschikking filmopbrengst",
@@ -53,3 +53,6 @@ def raadplegen_tickets():
             tabel = PrettyTable(["Film", "Omzet"])
             tabel.add_rows(omzet_per_film)
             print(tabel)
+
+        print("\n<italic>Druk op een toets om verder te gaan...</italic>")
+        input()

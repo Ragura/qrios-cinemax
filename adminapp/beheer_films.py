@@ -7,11 +7,11 @@ import requests
 
 
 def beheer_films():
-    clear_terminal()
     config = ConfigParser()
     config.read("config.ini")
-    print("<white,blue>BEHEER FILMS</white,blue>")
     while True:
+        clear_terminal()
+        print("<white,blue>BEHEER FILMS</white,blue>")
         menu_items = [
             "Lijst films",
             "Film toevoegen",
@@ -27,6 +27,8 @@ def beheer_films():
         if keuze == 0:
             break
         elif keuze == 1:
+            clear_terminal()
+            print("<white,blue>LIJST FILMS</white,blue>")
             films = sorted(dm.alle_films(), key=lambda x: x.titel)
             tabel = PrettyTable()
             tabel.field_names = ["ID", "Titel", "Duur", "KNT", "IMDB_ID"]
@@ -36,6 +38,8 @@ def beheer_films():
             print(tabel)
 
         elif keuze == 2:
+            clear_terminal()
+            print("<white,blue>FILM TOEVOEGEN</white,blue>")
             while True:
                 print("<bold>IMDB ID van film: </bold>", end="")
                 imdb_id = input()
@@ -88,6 +92,8 @@ def beheer_films():
                 print("<green><bold>Film succesvol toegevoegd!</bold></green>")
 
         elif keuze == 3:
+            clear_terminal()
+            print("<white,blue>FILM ZOEKEN</white,blue>")
             search = input("Zoek een film op titel of IMDB ID: ")
             if search:
                 resultaten = dm.zoek_films(titel=search, imdb_id=search)
@@ -100,6 +106,8 @@ def beheer_films():
                 print(tabel)
 
         elif keuze == 4:
+            clear_terminal()
+            print("<white,blue>FILM VERWIJDEREN</white,blue>")
             search = input_getal(
                 "Verwijder een film op ID: ", leeg_toegestaan=True)
             if search:
