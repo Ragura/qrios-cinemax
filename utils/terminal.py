@@ -2,7 +2,6 @@ from typing import Union, Optional, Sequence
 import os
 from ansimarkup import ansiprint as print
 from datetime import datetime
-import time
 from zoneinfo import ZoneInfo
 
 

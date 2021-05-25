@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from models.vertoning import Vertoning
-from models.film import Film
 from datetime import datetime
 from zoneinfo import ZoneInfo
 from sqlite3 import Row

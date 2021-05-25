@@ -1,5 +1,5 @@
 from ansimarkup import ansiprint as print
-from utils.terminal import input_verplicht, maak_menu, input_getal, input_ja_nee, input_datum, input_tijd, clear_terminal
+from utils.terminal import maak_menu, input_getal, clear_terminal
 from db.datamanager import DataManager as dm
 from prettytable import PrettyTable
 from datetime import datetime
