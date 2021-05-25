@@ -1,6 +1,4 @@
 import PySimpleGUI as sg
-from PySimpleGUI.PySimpleGUI import HorizontalSeparator
-from layouts.gui_utils import get_img_data
 
 from layouts.layout_films import create_layout_films
 from layouts.layout_detail import create_layout_detail, update_layout_detail, update_layout_prijs
