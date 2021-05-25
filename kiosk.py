@@ -10,7 +10,7 @@ from models.ticket import Ticket
 
 sg.theme('DarkBlue4')
 
-splash = sg.Window("CINEMAX", [[sg.Image("splash.png")]], no_titlebar=True,
+splash = sg.Window("CINEMAX", [[sg.Image("assets/splash.png")]], no_titlebar=True,
                    keep_on_top=True, size=(591, 335), element_padding=(0, 0), margins=(0, 0))
 splash.read(timeout=0)
 

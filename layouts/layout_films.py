@@ -6,7 +6,7 @@ from layouts.gui_utils import get_img_data
 def create_layout_films(films: list[Film]):
 
     logo = sg.Image(data=get_img_data(
-        "logo_wit.png", maxsize=(50, 50), first=True, local=True))
+        "assets/logo_wit.png", maxsize=(50, 50), first=True, local=True))
 
     rij_titel = [
         sg.Frame(title="", layout=[[logo, sg.Text("CINEMAX", font="Helvetica 30")]], pad=(0, 10))]
