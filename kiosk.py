@@ -70,7 +70,7 @@ while True:
         if huidige_vertoning:
             update_layout_prijs(window, huidige_vertoning)
     if event == "-koop_tickets-":
-        if (huidige_vertoning):
+        if (huidige_vertoning and huidige_film):
             aantal_volwassenen = int(values["-volwassenen-"])
             aantal_kinderen = int(values["-kinderen-"])
             prijs_volwassene = Ticket.bereken_prijs(huidige_vertoning, False)
@@ -78,7 +78,7 @@ while True:
             tickets = [Ticket(huidige_vertoning, True, prijs_kind) for _ in range(
                 aantal_kinderen)] + [Ticket(huidige_vertoning, False, prijs_volwassene) for _ in range(aantal_volwassenen)]
             dm.insert_tickets(tickets)
-            sg.Window("Tickets gekocht", create_layout_ticket(huidige_vertoning.film), element_justification="center",
+            sg.Window("Tickets gekocht", create_layout_ticket(huidige_film), element_justification="center",
                       auto_close=True, auto_close_duration=3, margins=(20, 20), keep_on_top=True, no_titlebar=True).read(close=True)[0]
             window["-l_films-"].update(visible=True)
             window["-l_detail-"].update(visible=False)

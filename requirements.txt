@@ -10,5 +10,6 @@ pycodestyle==2.7.0
 PySimpleGUI==4.38.0
 requests==2.25.1
 toml==0.10.2
+tzdata==2021.1
 urllib3==1.26.4
 wcwidth==0.2.5

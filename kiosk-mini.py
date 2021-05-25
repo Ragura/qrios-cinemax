@@ -78,7 +78,7 @@ layout = [
 
 global window
 window = sg.Window('Cinemax', layout, size=(
-    640, 720), element_justification="center", font="Helvetica 16", element_padding=(5, 5))
+    850, 800), element_justification="center", font="Helvetica 16", element_padding=(5, 5))
 
 
 def update_prijs(vertoning: Vertoning) -> None:

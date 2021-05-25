@@ -11,7 +11,7 @@ def create_layout_films(films: list[Film]):
     rij_titel = [
         sg.Frame(title="", layout=[[logo, sg.Text("CINEMAX", font="Helvetica 30")]], pad=(0, 10))]
 
-    FILMS_PER_RIJ = 5
+    FILMS_PER_RIJ = 4
 
     def maak_film_kolom(film: Film):
         return sg.Column([

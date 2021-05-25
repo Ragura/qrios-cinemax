@@ -41,7 +41,7 @@ def create_layout_detail():
                             sg.Text("Aantal kinderen: ", font="Helvetica 18",
                                     visible=True, key="-label_kinderen-", pad=((0, 7), (10, 0))),
                             sg.Spin(values=[i for i in range(
-                                999)], font="Helvetica 18", enable_events=True, key="-kinderen-", visible=True, pad=((0, 0), (10, 0)))
+                                999)], font="Helvetica 18", enable_events=True, key="-kinderen-", visible=True, pad=((0, 10), (10, 0)))
                         ],
                         [
                             sg.Text("Prijs: €", font="Helvetica 18",
