@@ -1,5 +1,6 @@
 from ansimarkup import ansiprint as print
 from utils.terminal import input_verplicht, maak_menu, input_getal, input_ja_nee, input_datum, input_tijd, clear_terminal
+from models.vertoning import Vertoning
 from db.datamanager import DataManager as dm
 from prettytable import PrettyTable
 from datetime import datetime
@@ -54,41 +55,71 @@ def beheer_vertoningen():
             while True:
                 print(
                     f"<green>Aanmaken vertoningen voor {film.titel}, afbreken met lege invoer:</green>")
-                print("<bold>Moment (UU:MM):</bold> ", end="")
-                moment = input_tijd(leeg_toegestaan=True)
-                if not moment:
-                    break
-                print("<bold>Zaal:</bold> ", end="")
-                zaal = input_getal(leeg_toegestaan=True)
+
+                # Zaal kiezen
+                zaal = None
+                while not zaal:
+                    print("<bold>Zaal:</bold> ", end="")
+                    zaal_nummer = input_getal(leeg_toegestaan=True)
+                    if not zaal_nummer:
+                        break
+                    zaal = dm.get_zaal_by_nummer(int(zaal_nummer))
+                    if not zaal:
+                        print(
+                            f"<red>Zaal met nummer {zaal_nummer} bestaat niet.</red>")
                 if not zaal:
                     break
-                print("<bold>3D? (J/N):</bold> ", end="")
-                drie_d = input_ja_nee(leeg_toegestaan=True)
-                if drie_d == None:
+
+                # Moment kiezen
+                moment = None
+                while True:
+                    print("<bold>Moment (UU:MM):</bold> ", end="")
+                    moment = input_tijd(leeg_toegestaan=True)
+                    if not moment:
+                        break
+                    datum_moment = datetime(
+                        datum.year, datum.month, datum.day,
+                        moment.hour, moment.minute, tzinfo=ZoneInfo("Europe/Brussels"))
+                    # Nakijken of film wel past in het tijdslot
+                    vertoning_overlap = dm.vertoning_overlap(
+                        datum_moment, zaal.id, film.duur, 20)
+                    if not vertoning_overlap:
+                        moment = datum_moment
+                        break
+                    print(
+                        f"<red>Vertoning valt samen met de vertoning van {vertoning_overlap.film.titel} om {vertoning_overlap.moment}.")
+
+                if not moment:
                     break
-                gegevens_vertoning.append({
-                    "uur": moment.hour,
-                    "minuten": moment.minute,
-                    "zaal": zaal,
-                    "drie_d": drie_d
-                })
 
-            vertoningen = [{
-                "film_id": film.id,
-                "datum": datetime(
-                    datum.year, datum.month, datum.day,
-                    vertoning["uur"], vertoning["minuten"], tzinfo=ZoneInfo("Europe/Brussels")),
-                "zaal": vertoning["zaal"],
-                "drie_d": vertoning["drie_d"]
-            } for vertoning in gegevens_vertoning]
+                # 3D versie kiezen
+                if zaal.drie_d_ondersteuning:
+                    print("<bold>3D? (J/N):</bold> ", end="")
+                    drie_d = input_ja_nee(leeg_toegestaan=True)
+                    if drie_d == None:
+                        break
+                else:
+                    drie_d = False
 
-            try:
-                dm.add_vertoningen(vertoningen)
-            except:
-                print(
-                    "<red><bold>Aanmaken vertoningen mislukt. Contacteer een administrator.</bold></red>")
-            else:
-                print("<green><bold>Vertoningen succesvol toegevoegd!</bold></green>")
+                vertoning = Vertoning(str(datum_moment), film, zaal, drie_d)
+
+                # vertoningen = [{
+                #     "film_id": film.id,
+                #     "datum": datetime(
+                #         datum.year, datum.month, datum.day,
+                #         vertoning["uur"], vertoning["minuten"], tzinfo=ZoneInfo("Europe/Brussels")),
+                #     "zaal": vertoning["zaal"].id,
+                #     "drie_d": vertoning["drie_d"]
+                # } for vertoning in gegevens_vertoning]
+
+                try:
+                    dm.add_vertoning(vertoning)
+                except:
+                    print(
+                        "<red><bold>Aanmaken vertoningen mislukt. Contacteer een administrator.</bold></red>")
+                else:
+                    print(
+                        "<green><bold>Vertoningen succesvol toegevoegd!</bold></green>")
 
         elif keuze == 3:
             search = input_getal(

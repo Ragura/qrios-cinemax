@@ -2,9 +2,10 @@ from db.database import dbconn
 from models.film import Film
 from models.vertoning import Vertoning
 from models.ticket import Ticket
+from models.zaal import Zaal
 from datetime import datetime
 from zoneinfo import ZoneInfo
-from typing import TypedDict
+from typing import TypedDict, Optional
 
 
 class FilmOmzet(TypedDict):
@@ -55,13 +56,6 @@ class DataManager:
             cur.execute(
                 "DELETE FROM films WHERE id = ?", [id])
 
-    # @staticmethod
-    # def zoek_vertoning(film_id: int = 0) -> list[Vertoning]:
-    #     with dbconn() as cur:
-    #         cur.execute(
-    #             "SELECT * FROM vertoningen WHERE film_id = ?", [film_id])
-    #         return [Vertoning(**row) for row in cur.fetchall()]
-
     @staticmethod
     def zoek_vertoning_by_id(id: int) -> Vertoning:
         with dbconn() as cur:
@@ -81,13 +75,24 @@ class DataManager:
             cur.execute(
                 "DELETE FROM vertoningen WHERE id = ?", [id])
 
+    # @staticmethod
+    # def add_vertoningen(vertoningen: list[dict]) -> None:
+    #     vertoningen_lists = [list(vertoning.values())
+    #                          for vertoning in vertoningen]
+    #     with dbconn() as cur:
+    #         cur.executemany("INSERT INTO vertoningen (film_id, datum, zaal_id, drie_d) VALUES (?, ?, ?, ?)",
+    #                         vertoningen_lists)
+
     @staticmethod
-    def add_vertoningen(vertoningen: list[dict]) -> None:
-        vertoningen_lists = [list(vertoning.values())
-                             for vertoning in vertoningen]
+    def add_vertoning(vertoning: Vertoning) -> None:
         with dbconn() as cur:
-            cur.executemany("INSERT INTO vertoningen (film_id, datum, zaal, drie_d) VALUES (?, ?, ?, ?)",
-                            vertoningen_lists)
+            cur.execute("INSERT INTO vertoningen (film_id, datum, zaal_id, drie_d) VALUES (?, ?, ?, ?)",
+                        [
+                            vertoning.film.id,
+                            vertoning.datum,
+                            vertoning.zaal.id,
+                            vertoning.drie_d
+                        ])
 
     @staticmethod
     def tel_vertoningen(film_id: int = 0) -> int:
@@ -108,6 +113,29 @@ class DataManager:
                 f" WHERE DATE(vertoningen.datum) == DATE('now')")
 
             return [Vertoning.from_sql_row(row) for row in cur.fetchall()]
+
+    @staticmethod
+    def vertoning_overlap(datum: datetime, zaal_id: int, duur: int, speling: int) -> Optional[Vertoning]:
+        with dbconn() as cur:
+            cur.execute(
+                f"SELECT vertoningen.*,"
+                + prefix_column_names_sql("films", "film",
+                                          "id", "titel", "knt", "duur", "imdb_id")
+                + "," + prefix_column_names_sql("zalen", "zaal",
+                                                "id", "nummer", "rijen", "zetels_per_rij", "drie_d_ondersteuning")
+                + f" FROM vertoningen"
+                f" INNER JOIN films ON vertoningen.film_id = films.id"
+                f" INNER JOIN zalen ON vertoningen.zaal_id = zalen.id"
+                f" WHERE (DATETIME(:start) <= DATETIME(datum, '+' || films.duur || ' minutes') AND DATETIME(:start, :speling) >= DATETIME(datum))"
+                f" AND zaal_id == :zaal_id",
+                {
+                    "zaal_id": zaal_id,
+                    "start": datum,
+                    "speling": f"+{duur + speling} minutes"
+                }
+            )
+            vertoning = cur.fetchone()
+            return Vertoning.from_sql_row(vertoning) if vertoning else None
 
     @staticmethod
     def insert_tickets(tickets: list[Ticket]) -> None:
@@ -163,6 +191,16 @@ class DataManager:
 
             cur.execute(command)
             return cur.fetchall()
+
+    @staticmethod
+    def get_zaal_by_nummer(nummer: int) -> Optional[Zaal]:
+        with dbconn() as cur:
+            cur.execute(
+                f"SELECT *"
+                + f" FROM zalen"
+                + f" WHERE zalen.nummer = ?", [nummer])
+            zaal = cur.fetchone()
+            return Zaal.from_sql_row(zaal) if zaal else None
 
 
 if __name__ == '__main__':
