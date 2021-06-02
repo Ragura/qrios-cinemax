@@ -72,6 +72,7 @@ def beheer_vertoningen():
 
                 # Moment kiezen
                 moment = None
+                datum_moment = None
                 while True:
                     print("<bold>Moment (UU:MM):</bold> ", end="")
                     moment = input_tijd(leeg_toegestaan=True)
@@ -102,15 +103,6 @@ def beheer_vertoningen():
                     drie_d = False
 
                 vertoning = Vertoning(str(datum_moment), film, zaal, drie_d)
-
-                # vertoningen = [{
-                #     "film_id": film.id,
-                #     "datum": datetime(
-                #         datum.year, datum.month, datum.day,
-                #         vertoning["uur"], vertoning["minuten"], tzinfo=ZoneInfo("Europe/Brussels")),
-                #     "zaal": vertoning["zaal"].id,
-                #     "drie_d": vertoning["drie_d"]
-                # } for vertoning in gegevens_vertoning]
 
                 try:
                     dm.add_vertoning(vertoning)
