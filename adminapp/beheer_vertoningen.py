@@ -35,6 +35,9 @@ def beheer_vertoningen():
             print(tabel)
 
         elif keuze == 2:
+            # Minuten speling na vertoning voor opkuis/onderhoud
+            SPELING = 20
+
             vandaag = datetime.now(
                 ZoneInfo("Europe/Brussels")).strftime('%d-%m-%Y')
             print(f"<bold>Datum: ({vandaag}) </bold>", end="")
@@ -83,7 +86,7 @@ def beheer_vertoningen():
                         moment.hour, moment.minute, tzinfo=ZoneInfo("Europe/Brussels"))
                     # Nakijken of film wel past in het tijdslot
                     vertoning_overlap = dm.vertoning_overlap(
-                        datum_moment, zaal.id, film.duur, 20)
+                        datum_moment, zaal.id, film.duur, SPELING)
                     if not vertoning_overlap:
                         moment = datum_moment
                         break
