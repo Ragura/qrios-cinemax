@@ -1,9 +1,12 @@
 -- SQLite
 
 DROP TABLE IF EXISTS films;
+DROP TABLE IF EXISTS zalen;
+DROP TABLE IF EXISTS zetels;
 DROP TABLE IF EXISTS vertoningen;
 DROP TABLE IF EXISTS verkoop;
 DROP TABLE IF EXISTS tickets;
+DROP TABLE IF EXISTS zetelreservaties;
 
 
 CREATE TABLE IF NOT EXISTS films (
@@ -14,20 +17,49 @@ CREATE TABLE IF NOT EXISTS films (
     duur INTEGER NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS zalen (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nummer INTEGER NOT NULL,
+    drie_d_ondersteuning BOOLEAN DEFAULT 0 NOT NULL,
+    rijen INTEGER NOT NULL,
+    zetels_per_rij INTEGER NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS vertoningen (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     film_id INTEGER NOT NULL,
     datum TEXT NOT NULL,
-    zaal INTEGER NOT NULL,
+    zaal_id INTEGER,
     drie_d BOOLEAN DEFAULT FALSE,
-    FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE
+    FOREIGN KEY (film_id) REFERENCES films (id) ON DELETE CASCADE,
+    FOREIGN KEY (zaal_id) REFERENCES zalen (id) ON DELETE SET NULL
 );
 
 CREATE TABLE IF NOT EXISTS tickets (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     datum_verkoop TEXT NOT NULL,
-    vertoning_id INTEGER ,
+    vertoning_id INTEGER,
     minderjarig BOOLEAN NOT NULL,
     prijs REAL NOT NULL,
-    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE SET NULL
+    zetelreservatie_id INTEGER,
+    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE SET NULL,
+    FOREIGN KEY (zetelreservatie_id) REFERENCES zetelreservaties (id) ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS zetels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    zaal_id INTEGER NOT NULL,
+    rij INTEGER NOT NULL,
+    nummer TEXT NOT NULL,
+    toegankelijk BOOLEAN DEFAULT 0 NOT NULL,
+    FOREIGN KEY (zaal_id) REFERENCES zalen (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS zetelreservaties (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    zetel_id INTEGER NOT NULL,
+    vertoning_id INTEGER NOT NULL,
+    FOREIGN KEY (vertoning_id) REFERENCES vertoningen (id) ON DELETE CASCADE,
+    FOREIGN KEY (zetel_id) REFERENCES zetels (id) ON DELETE CASCADE
+);
+
